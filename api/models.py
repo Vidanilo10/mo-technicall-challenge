@@ -26,13 +26,11 @@ class Loan(models.Model):
     updated_timestamp = models.DateTimeField()
     external_id_character = models.IntegerField()
     amount = models.DecimalField()
-    
     contract_version_character = models.CharField(max_length=30)
     maximum_payment_date = models.DateTimeField()
     taken_at = models.DateTimeField()
-    customer_id = models.IntegerField()
+    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     outstanding = models.IntegerField()
-
 
     class LoanStatus(models.IntegerChoices):
         PENDING = 1, "Active"
@@ -59,8 +57,7 @@ class Payment(models.Model):
     external_id_character = models.CharField(max_length=60)
     total_amount = models.DecimalField()
     paid_at = models.DateTimeField()
-    customer_id = models.IntegerField()
-
+    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     class PaymentStatus(models.IntegerChoices):
         COMPLETED = 1, "Completed"
@@ -81,6 +78,5 @@ class PaymentDetail(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     amount = models.DecimalField()
-    loan_id = models.IntegerField()
-    payment_id = models.IntegerField()
-
+    loan_id = models.ForeignKey(Loan, on_delete=models.CASCADE)
+    payment_id = models.ForeignKey(Payment, on_delete=models.CASCADE)
