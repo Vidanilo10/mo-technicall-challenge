@@ -4,7 +4,7 @@ class Customer(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.IntegerField()
-    score = models.DecimalField(decimal_places=2, max_digits=2)
+    score = models.DecimalField(decimal_places=2, max_digits=10)
     preapproved_at = models.DateTimeField()
 
     class CustomerStatus(models.IntegerChoices):
@@ -17,19 +17,16 @@ class Customer(models.Model):
         verbose_name="Estado"
     )
 
-    def __str__(self):
-        return self.status
-
 
 class Loan(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.IntegerField()
-    amount = models.DecimalField(decimal_places=2, max_digits=2)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     contract_version_character = models.CharField(max_length=30)
     maximum_payment_date = models.DateTimeField()
     taken_at = models.DateTimeField()
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     outstanding = models.IntegerField()
 
     class LoanStatus(models.IntegerChoices):
@@ -55,9 +52,9 @@ class Payment(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.CharField(max_length=60)
-    total_amount = models.DecimalField(decimal_places=2, max_digits=2)
+    total_amount = models.DecimalField(decimal_places=2, max_digits=10)
     paid_at = models.DateTimeField()
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     class PaymentStatus(models.IntegerChoices):
         COMPLETED = 1, "Completed"
@@ -69,14 +66,11 @@ class Payment(models.Model):
     )
 
 
-    def __str__(self):
-        return self.status
-
 
 
 class PaymentDetail(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     amount = models.DecimalField(decimal_places=2, max_digits=2)
-    loan_id = models.ForeignKey(Loan, on_delete=models.CASCADE)
-    payment_id = models.ForeignKey(Payment, on_delete=models.CASCADE)
+    loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
