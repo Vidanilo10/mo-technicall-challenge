@@ -38,12 +38,14 @@ DEFAULT_APPS = [
 ]
 
 INCLUDED_APPS = [
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
 ]
 
 
 LOCAL_APPS = [
-    'api'
+    'api',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + INCLUDED_APPS + LOCAL_APPS
