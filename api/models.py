@@ -4,7 +4,7 @@ class Customer(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.IntegerField()
-    score = models.DecimalField()
+    score = models.DecimalField(decimal_places=2, max_digits=2)
     preapproved_at = models.DateTimeField()
 
     class CustomerStatus(models.IntegerChoices):
@@ -25,7 +25,7 @@ class Loan(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.IntegerField()
-    amount = models.DecimalField()
+    amount = models.DecimalField(decimal_places=2, max_digits=2)
     contract_version_character = models.CharField(max_length=30)
     maximum_payment_date = models.DateTimeField()
     taken_at = models.DateTimeField()
@@ -55,7 +55,7 @@ class Payment(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
     external_id_character = models.CharField(max_length=60)
-    total_amount = models.DecimalField()
+    total_amount = models.DecimalField(decimal_places=2, max_digits=2)
     paid_at = models.DateTimeField()
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
@@ -77,6 +77,6 @@ class Payment(models.Model):
 class PaymentDetail(models.Model):
     created_timestamp = models.DateTimeField()
     updated_timestamp = models.DateTimeField()
-    amount = models.DecimalField()
+    amount = models.DecimalField(decimal_places=2, max_digits=2)
     loan_id = models.ForeignKey(Loan, on_delete=models.CASCADE)
     payment_id = models.ForeignKey(Payment, on_delete=models.CASCADE)
