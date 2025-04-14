@@ -27,3 +27,8 @@ class CustomerViewSet(viewsets.ViewSet):
         queryset = Customer.objects.all()
         serializer = CustomerSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+    def create(self, request):
+        dir_request = dir(request)
+        return dir_request
