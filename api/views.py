@@ -2,33 +2,85 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from .serializers import CustomerSerializer, LoanSerializer, PaymentDetailSerializer, PaymentSerializer
 from .models import Customer, Loan, Payment, PaymentDetail
 
 
-"""
-class UserViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
-"""
-
-
 class CustomerViewSet(viewsets.ViewSet):
     """
-    A simple ViewSet for listing or retrieving customers.
+    A simple ViewSet for create and get customers.
     """
 
+    queryset = Customer.objects.all()
+    serializer = CustomerSerializer(queryset, many=True)
+    serializer_class = CustomerSerializer
+
     def list(self, request):
-        queryset = Customer.objects.all()
-        serializer = CustomerSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(self.serializer.data)
 
 
     def create(self, request):
-        dir_request = dir(request)
-        return dir_request
+        auth = request.auth
+        user = request.user
+        data = request.data
+        query_params = request.query_params
+        return Response()
+    
+
+    @action(detail=True, methods=['get'])
+    def get_customer_balance(self, request, pk=None):
+        return Response({'status': 'password set'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class LoansViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for create and query loan by customer.
+    """
+
+    queryset = Loan.objects.all()
+    serializer = LoanSerializer(queryset, many=True)
+    serializer_class = LoanSerializer
+
+    def create(self, request):
+        auth = request.auth
+        user = request.user
+        data = request.data
+        query_params = request.query_params
+        return Response()
+    
+    """
+    @action(detail=True, methods=['get'])
+    def get_customer_balance(self, request, pk=None):
+        return Response({'status': 'password set'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    """
+
+
+class PaymentsViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for create and query payment by customer.
+    """
+
+    queryset = Payment.objects.all()
+    serializer = PaymentSerializer(queryset, many=True)
+    serializer_class = PaymentSerializer
+
+    def create(self, request):
+        auth = request.auth
+        user = request.user
+        data = request.data
+        query_params = request.query_params
+        return Response()
+    
+    """
+    @action(detail=True, methods=['get'])
+    def get_customer_balance(self, request, pk=None):
+        return Response({'status': 'password set'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    """
