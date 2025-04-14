@@ -9,6 +9,8 @@ from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema # type: ignore
+from drf_yasg import openapi
 
 from .serializers import CustomerSerializer, LoanSerializer, PaymentDetailSerializer, PaymentSerializer
 from .models import Customer, Loan, Payment, PaymentDetail
@@ -25,12 +27,17 @@ class CustomerViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAuthenticated]
 
+    customer_response = openapi.Response('response description', serializer_class)
+
+
+    @swagger_auto_schema(responses = {200: customer_response})
     def list(self, request):
         try:
             return Response(self.serializer.data)
         except:
             return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(request_body=serializer_class, responses = {201: customer_response})
     def create(self, request):
         auth = request.auth
         user = request.user
