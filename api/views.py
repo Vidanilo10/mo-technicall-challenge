@@ -29,7 +29,7 @@ class CustomerViewSet(viewsets.ViewSet):
         try:
             return Response(self.serializer.data)
         except:
-            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request):
         auth = request.auth
@@ -55,6 +55,9 @@ class LoansViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gene
     serializer = LoanSerializer(queryset, many=True)
     serializer_class = LoanSerializer
 
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated]
+
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['customer']
 
@@ -75,5 +78,16 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Ge
     serializer = PaymentSerializer(queryset, many=True)
     serializer_class = PaymentSerializer
 
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated]
+
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['customer']
+
+
+    def create(self, request):
+        auth = request.auth
+        user = request.user
+        data = request.data
+        query_params = request.query_params
+        return Response()
