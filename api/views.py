@@ -60,10 +60,9 @@ class LoansViewSet(viewsets.ViewSet):
         return Response()
 
 
+"""
 class PaymentsViewSet(viewsets.ViewSet):
-    """
     A simple ViewSet for create and query payment by customer.
-    """
 
     queryset = Payment.objects.all()
     serializer = PaymentSerializer(queryset, many=True)
@@ -78,3 +77,18 @@ class PaymentsViewSet(viewsets.ViewSet):
         data = request.data
         query_params = request.query_params
         return Response()
+"""
+
+
+from rest_framework import mixins, viewsets
+
+class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    A simple ViewSet for create and query payment by customer.
+    """
+    queryset = Payment.objects.all()
+    serializer = PaymentSerializer(queryset, many=True)
+    serializer_class = PaymentSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['customer']
