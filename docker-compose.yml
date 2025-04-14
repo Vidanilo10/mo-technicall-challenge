@@ -21,3 +21,5 @@ services:
       - .env
     depends_on:
       - db
+    environment:
+      SLEEP_BEFORE_START: 10
