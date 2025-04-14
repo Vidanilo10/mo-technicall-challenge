@@ -51,12 +51,20 @@ class CustomerViewSet(viewsets.ViewSet):
 
     @action(detail=True, methods=['get'])
     def get_customer_balance(self, request, pk=None):
-        
-        loans = Loan.objects.filter(customer_id=pk)
 
-        print(loans)
-
+        customer = Customer.objects.get(pk=pk)
+        score = customer.score
+        total_debt = Loan.objects.filter(customer_id=pk).aggregate(total_amount=Sum('outstanding'))
+        available_amount = score - total_debt
         
+        return_data = {
+            "external_id": customer.external_id_character,
+            "score": score,
+            "available_amount": available_amount,
+            "total_debt": total_debt
+        }
+        
+        return Response(return_data, status=status.HTTP_200_OK)
 
         return Response({'status': 'password set'})
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
