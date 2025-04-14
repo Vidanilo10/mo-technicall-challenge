@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CustomerSerializer, LoanSerializer, PaymentDetailSerializer, PaymentSerializer
 from .models import Customer, Loan, Payment, PaymentDetail
@@ -20,10 +22,14 @@ class CustomerViewSet(viewsets.ViewSet):
     queryset = Customer.objects.all()
     serializer = CustomerSerializer(queryset, many=True)
     serializer_class = CustomerSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        return Response(self.serializer.data)
-
+        try:
+            return Response(self.serializer.data)
+        except:
+            return Response(self.serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
     def create(self, request):
         auth = request.auth

@@ -159,3 +159,14 @@ MEDIA_URL = env("MEDIA_PATH", default="/media/")
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'Token',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
