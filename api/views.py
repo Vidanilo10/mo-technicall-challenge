@@ -66,7 +66,6 @@ class CustomerViewSet(viewsets.ViewSet):
         
         return Response(return_data, status=status.HTTP_200_OK)
 
-        return Response({'status': 'password set'})
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -87,14 +86,6 @@ class LoansViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gene
     filterset_fields = ['customer']
 
 
-    def create(self, request):
-        auth = request.auth
-        user = request.user
-        data = request.data
-        query_params = request.query_params
-        return Response()
-
-
 class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     A simple ViewSet for create and query payment by customer.
@@ -111,8 +102,18 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Ge
 
 
     def create(self, request):
-        auth = request.auth
-        user = request.user
-        data = request.data
-        query_params = request.query_params
-        return Response()
+        serializer = PaymentSerializer(data=request.data)
+    
+        if serializer.is_valid():
+            total_debt = Loan.objects.filter(customer_id=pk).aggregate(total_amount=Sum('outstanding'))
+
+            print(total_debt)
+
+            if total_debt:
+                if request.data.get("total_amount") <= total_debt:
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

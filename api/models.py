@@ -30,14 +30,14 @@ class Loan(models.Model):
     outstanding = models.IntegerField()
 
     class LoanStatus(models.IntegerChoices):
-        PENDING = 1, "Active"
-        ACTIVE = 2, "Inactive"
+        PENDING = 1, "Pending"
+        ACTIVE = 2, "Active"
         REJECTED = 3, "Rejected"
         PAID = 4, "Paid"
 
     status = models.IntegerField(
         choices=LoanStatus.choices,
-        default=LoanStatus.PENDING,
+        default=LoanStatus.ACTIVE,
         verbose_name="Estado"
     )
 
