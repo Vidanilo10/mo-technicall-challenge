@@ -46,7 +46,9 @@ INCLUDED_APPS = [
 
 
 LOCAL_APPS = [
-    'api',
+    'customers',
+    'loans',
+    'payments',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + INCLUDED_APPS + LOCAL_APPS
