@@ -41,6 +41,7 @@ INCLUDED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    'django_filters',
 ]
 
 
@@ -154,3 +155,7 @@ WHITENOISE_AUTOREFRESH = DEBUG
 
 MEDIA_ROOT = env("MEDIA_ROOT", default=BASE_DIR / "media")
 MEDIA_URL = env("MEDIA_PATH", default="/media/") 
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
