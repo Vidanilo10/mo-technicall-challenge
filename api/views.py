@@ -39,11 +39,22 @@ class CustomerViewSet(viewsets.ViewSet):
 
     @swagger_auto_schema(request_body=serializer_class, responses = {201: customer_response})
     def create(self, request):
-        auth = request.auth
-        user = request.user
+        # auth = request.auth
+        # user = request.user
+        
         data = request.data
-        query_params = request.query_params
-        return Response()
+
+        validation_serializer = CustomerSerializer(data=data)
+        
+        if validation_serializer.is_valid():
+            new_customer = Customer(
+                external_id_character = data.get("external_id_character"),
+                score = data.get("score"),
+                preapproved_at = data.get("preapproved_at"),
+                status = data.get("external_id_character"),
+            )
+            new_customer.save()
+        return Response(validation_serializer.data)
     
 
     @action(detail=True, methods=['get'])

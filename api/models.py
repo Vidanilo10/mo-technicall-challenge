@@ -1,9 +1,9 @@
 from django.db import models
 
 class Customer(models.Model):
-    created_timestamp = models.DateTimeField()
-    updated_timestamp = models.DateTimeField()
-    external_id_character = models.IntegerField()
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    updated_timestamp = models.DateTimeField(auto_now=True)
+    external_id_character = models.CharField(max_length=60)
     score = models.DecimalField(decimal_places=2, max_digits=10)
     preapproved_at = models.DateTimeField()
 
@@ -19,9 +19,9 @@ class Customer(models.Model):
 
 
 class Loan(models.Model):
-    created_timestamp = models.DateTimeField()
-    updated_timestamp = models.DateTimeField()
-    external_id_character = models.IntegerField()
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    updated_timestamp = models.DateTimeField(auto_now=True)
+    external_id_character = models.CharField(max_length=60)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     contract_version_character = models.CharField(max_length=30)
     maximum_payment_date = models.DateTimeField()
@@ -49,8 +49,8 @@ class Loan(models.Model):
 
 
 class Payment(models.Model):
-    created_timestamp = models.DateTimeField()
-    updated_timestamp = models.DateTimeField()
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    updated_timestamp = models.DateTimeField(auto_now=True)
     external_id_character = models.CharField(max_length=60)
     total_amount = models.DecimalField(decimal_places=2, max_digits=10)
     paid_at = models.DateTimeField()
@@ -69,8 +69,8 @@ class Payment(models.Model):
 
 
 class PaymentDetail(models.Model):
-    created_timestamp = models.DateTimeField()
-    updated_timestamp = models.DateTimeField()
-    amount = models.DecimalField(decimal_places=2, max_digits=2)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    updated_timestamp = models.DateTimeField(auto_now=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
