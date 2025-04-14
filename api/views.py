@@ -55,7 +55,7 @@ class CustomerViewSet(viewsets.ViewSet):
         customer = Customer.objects.get(pk=pk)
         score = customer.score
         total_debt = Loan.objects.filter(customer_id=pk).aggregate(total_amount=Sum('outstanding'))
-        available_amount = score - total_debt
+        available_amount = score - total_debt.get("total_amount")
         
         return_data = {
             "external_id": customer.external_id_character,
@@ -105,12 +105,10 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Ge
         serializer = PaymentSerializer(data=request.data)
     
         if serializer.is_valid():
-            total_debt = Loan.objects.filter(customer_id=pk).aggregate(total_amount=Sum('outstanding'))
-
-            print(total_debt)
+            total_debt = Loan.objects.filter(customer_id=request.data.get("customer")).aggregate(total_amount=Sum('outstanding'))
 
             if total_debt:
-                if request.data.get("total_amount") <= total_debt:
+                if request.data.get("total_amount") <= total_debt.get("total_amount"):
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 else:
