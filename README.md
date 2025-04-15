@@ -27,3 +27,4 @@ docker compose up
 ```
 docker run --rm mo-technicall-challenge-r-web pytest tests/ --disable-warnings
 ```
+![2025-04-15 12-52-24](https://github.com/user-attachments/assets/77716352-4082-413e-9517-bacf60baf4a3)
