@@ -27,8 +27,6 @@ class CustomerViewSet(viewsets.ViewSet):
 
     customer_response = openapi.Response('response description', serializer_class)
 
-
-    @swagger_auto_schema(responses = {200: customer_response})
     def list(self, request):
         customers = Customer.objects.all()
         serializer = CustomerSerializer(customers, many=True)
@@ -50,7 +48,7 @@ class CustomerViewSet(viewsets.ViewSet):
 
         customer = Customer.objects.get(pk=pk)
         score = customer.score
-        total_debt = Loan.objects.filter(customer_id=pk).aggregate(total_amount=Sum('outstanding'))
+        total_debt = Loan.objects.filter(external_id_character=pk).aggregate(total_amount=Sum('outstanding'))
         available_amount = score - total_debt.get("total_amount")
         
         return_data = {

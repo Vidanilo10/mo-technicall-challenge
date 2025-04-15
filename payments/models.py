@@ -6,7 +6,7 @@ from loans.models import Loan
 class Payment(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     updated_timestamp = models.DateTimeField(auto_now=True)
-    external_id_character = models.CharField(max_length=60)
+    external_id_character = models.CharField(max_length=60, primary_key=True)
     total_amount = models.DecimalField(decimal_places=2, max_digits=10)
     paid_at = models.DateTimeField()
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

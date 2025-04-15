@@ -30,9 +30,12 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Ge
     def create(self, request):
         serializer = PaymentSerializer(data=request.data)
 
+        print(request.data.get("customer"))
+
         if serializer.is_valid():
-            total_debt = Loan.objects.filter(customer_id=request.data.get("customer")).aggregate(
-                total_amount=Sum('outstanding'))
+            total_debt = Loan.objects.filter(external_id_character=request.data.get("customer")).aggregate(total_amount=Sum('outstanding'))
+
+            print(total_debt)
 
             if total_debt:
                 if request.data.get("total_amount") <= total_debt.get("total_amount"):
