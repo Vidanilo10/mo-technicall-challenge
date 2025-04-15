@@ -32,19 +32,29 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Ge
         loan = Loan.objects.get(external_id_character=loan_external_id)
         loan_amount = loan.amount
 
+        if request.data.get("total_amount"):
+            payment_amount = float(request.data.get("total_amount"))
+        else:
+            payment_amount = float(0)
+
         serializer = PaymentSerializer(data=request.data)
 
         if serializer.is_valid():
             total_debt = Loan.objects.filter(external_id_character=loan_external_id).aggregate(total_amount=Sum('outstanding'))
-
             if total_debt:
-                if request.data.get("total_amount") <= total_debt.get("total_amount"):
+
+                if total_debt.get("total_amount"):
+                    total_debt_value = float(total_debt.get("total_amount"))
+                else:
+                    total_debt_value = float(0)
+
+                if payment_amount <= total_debt_value:
                     serializer.save()
 
                     payment = Payment.objects.get(external_id_character=request.data.get("external_id_character"))
 
                     new_payment_detail = PaymentDetail(
-                        amount = request.data.get("total_amount"),
+                        amount = payment_amount,
                         loan = loan,
                         payment = payment
                     )
