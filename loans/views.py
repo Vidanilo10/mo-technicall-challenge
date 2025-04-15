@@ -29,7 +29,11 @@ class LoansViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gene
 
 
     def create(self, request):
-        amount = request.data.get("amount")
+        if request.data.get("amount"):
+            amount = float(request.data.get("amount"))
+        else:
+            amount = float(0)
+
         customer_external_id = request.data.get("customer")
         customer = Customer.objects.get(external_id_character=customer_external_id)
         
