@@ -10,6 +10,7 @@ class Payment(models.Model):
     total_amount = models.DecimalField(decimal_places=2, max_digits=10)
     paid_at = models.DateTimeField()
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    loan_external_id = models.ForeignKey(Loan, on_delete=models.CASCADE)
 
     class PaymentStatus(models.IntegerChoices):
         COMPLETED = 1, "Completed"
