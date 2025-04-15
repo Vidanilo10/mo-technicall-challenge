@@ -49,13 +49,24 @@ class CustomerViewSet(viewsets.ViewSet):
         customer = Customer.objects.get(pk=pk)
         score = customer.score
         total_debt = Loan.objects.filter(external_id_character=pk).aggregate(total_amount=Sum('outstanding'))
-        available_amount = score - total_debt.get("total_amount")
+        
+        total_debt_value = total_debt.get("total_amount")
+
+        if not total_debt_value:
+            total_debt_value = float(0.0)
+        else:
+            if total_debt_value != 0.0 and total_debt_value != float(0):
+                total_debt_value = float(total_debt_value)
+            else:
+                total_debt_value = float(0.0)
+
+        available_amount = float(score) - total_debt_value
         
         return_data = {
             "external_id": customer.external_id_character,
             "score": score,
             "available_amount": available_amount,
-            "total_debt": total_debt
+            "total_debt": total_debt_value
         }
         
         return Response(return_data, status=status.HTTP_200_OK)
