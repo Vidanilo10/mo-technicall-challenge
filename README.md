@@ -6,9 +6,19 @@ Request the creation of an API using the Django Rest Framework to manage and mon
 
 ## Requirments:
 1. Docker, Docker compose or Docker Desktop [docker](https://www.docker.com/)
+2. Git, [git](https://git-scm.com/)
 
 ## How to start API?
 ### Run app through docker
+
+
+```
+git clone https://github.com/Vidanilo10/mo-technicall-challenge.git
+```
+
+```
+cd mo-technicall-challenge
+```
 
 ```
 docker compose up
