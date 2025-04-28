@@ -1,7 +1,7 @@
 # MO Technical Test
 ![GK6dKYGN_400x400](https://github.com/user-attachments/assets/7f4d8abf-3c1d-4304-86e0-dad647614da2)
 
-Request the creation of an API using the Django Rest Framework to manage and monitor client services. The application must include the following models to access the control:
+Request the creation of an API using the Django Rest Framework to manage and monitor client services.
 
 
 ## Requirments:
